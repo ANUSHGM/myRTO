@@ -1,0 +1,129 @@
+<div class="container">
+  <h2>MyRTO : Attendance Management</h2>
+  
+  <!-- Add Employee Button -->
+  <button mat-raised-button color="primary" (click)="showAddForm = true">Add Employee</button>
+
+  <!-- Add Employee Form (Visible only when showAddForm is true) -->
+  <div *ngIf="showAddForm" class="add-employee-form">
+      <h3>Add New Employee</h3>
+      <form (ngSubmit)="addEmployee()">
+          <mat-form-field class="form-field">
+              <mat-label>Employee Name</mat-label>
+              <input matInput [(ngModel)]="newEmployee.employeeName" name="employeeName" required />
+          </mat-form-field>
+
+          <mat-form-field class="form-field">
+            <mat-label>Employee Email</mat-label>
+            <input matInput [(ngModel)]="newEmployee.employeeEmail" name="employeeEmail" required />
+        </mat-form-field>
+
+          <mat-form-field class="form-field">
+              <mat-label>Manager Name</mat-label>
+              <input matInput [(ngModel)]="newEmployee.managerName" name="managerName" required />
+          </mat-form-field>
+
+          <mat-form-field class="form-field">
+              <mat-label>Project </mat-label>
+              <input matInput [(ngModel)]="newEmployee.project" name="project" required />
+          </mat-form-field>
+
+          <mat-form-field class="form-field">
+            <mat-label>Password</mat-label>
+            <input matInput [(ngModel)]="newEmployee.password" name="password" required />
+        </mat-form-field>
+
+          <mat-form-field class="form-field">
+              <mat-label>Days Present</mat-label>
+              <input matInput type="number" [(ngModel)]="newEmployee.daysPresent" name="daysPresent" required />
+          </mat-form-field>
+
+          <button mat-raised-button color="primary" type="submit">Save</button>
+          <button mat-raised-button color="warn" type="button" (click)="cancelAddEmployee()">Cancel</button>
+      </form>
+  </div>
+
+  <!-- Employee Table -->
+  <table mat-table [dataSource]="employees" class="mat-elevation-z8">
+    
+    <!-- Employee ID Column -->
+    <ng-container matColumnDef="sapId">
+      <th mat-header-cell *matHeaderCellDef> Employee ID </th>
+      <td mat-cell *matCellDef="let employee; let i = index">
+        <span *ngIf="!editingIndex.includes(i)">{{ employee.sapId }}</span>
+        <input *ngIf="editingIndex.includes(i)" [(ngModel)]="employee.sapId" />
+      </td>
+    </ng-container>
+
+    <!-- Employee Name Column -->
+    <ng-container matColumnDef="employeeName">
+      <th mat-header-cell *matHeaderCellDef> Employee Name </th>
+      <td mat-cell *matCellDef="let employee; let i = index">
+        <span *ngIf="!editingIndex.includes(i)">{{ employee.employeeName }}</span>
+        <input *ngIf="editingIndex.includes(i)" [(ngModel)]="employee.employeeName" />
+      </td>
+    </ng-container>
+
+    <!-- Employee Email Column -->
+    <ng-container matColumnDef="employeeEmail">
+      <th mat-header-cell *matHeaderCellDef> Employee Email </th>
+      <td mat-cell *matCellDef="let employee; let i = index">
+        <span *ngIf="!editingIndex.includes(i)">{{ employee.employeeEmail }}</span>
+        <input *ngIf="editingIndex.includes(i)" [(ngModel)]="employee.employeeEmail" />
+      </td>
+    </ng-container>
+
+    <!-- Manager Name Column -->
+    <ng-container matColumnDef="managerName">
+      <th mat-header-cell *matHeaderCellDef> Manager Name </th>
+      <td mat-cell *matCellDef="let employee; let i = index">
+        <span *ngIf="!editingIndex.includes(i)">{{ employee.managerName }}</span>
+        <input *ngIf="editingIndex.includes(i)" [(ngModel)]="employee.managerName" />
+      </td>
+    </ng-container>
+
+    <!-- Project Name Column -->
+    <ng-container matColumnDef="project">
+      <th mat-header-cell *matHeaderCellDef> Project </th>
+      <td mat-cell *matCellDef="let employee; let i = index">
+        <span *ngIf="!editingIndex.includes(i)">{{ employee.project }}</span>
+        <input *ngIf="editingIndex.includes(i)" [(ngModel)]="employee.project" />
+      </td>
+    </ng-container>
+
+    <!-- Days Present Column -->
+    <ng-container matColumnDef="daysPresent">
+      <th mat-header-cell *matHeaderCellDef> Days Present </th>
+      <td mat-cell *matCellDef="let employee; let i = index">
+        <span *ngIf="!editingIndex.includes(i)">{{ employee.daysPresent }}</span>
+        <input *ngIf="editingIndex.includes(i)" type="number" [(ngModel)]="employee.daysPresent" />
+      </td>
+    </ng-container>
+
+    <!-- Alert Column -->
+    <ng-container matColumnDef="alert">
+      <th mat-header-cell *matHeaderCellDef> Alert </th>
+      <td mat-cell *matCellDef="let employee">
+        <button mat-button *ngIf="employee.daysPresent < 12" (click)="sendAlert(employee)">Alert</button>
+      </td>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Actions </th>
+      <td mat-cell *matCellDef="let employee; let i = index">
+        <button mat-button color="accent" *ngIf="!editingIndex.includes(i)" (click)="editEmployee(i)">Edit</button>
+        <button mat-button color="primary" *ngIf="editingIndex.includes(i)" (click)="saveEdit(i)">Save</button>
+        <button mat-button color="warn" (click)="confirmDelete(i)">Delete</button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <!-- Undo Delete Notification -->
+  <div *ngIf="deletedEmployee">
+    <p>Employee "{{ deletedEmployee.employeeName }}" deleted. <button (click)="undoDelete()">Undo</button></p>
+  </div>
+</div>

@@ -1,0 +1,50 @@
+<div class="login-container">
+    <mat-card class="login-form">
+      <h2>Login</h2>
+      <form (ngSubmit)="onSubmit()" #loginForm="ngForm" novalidate>
+        <mat-form-field class="form-field" appearance="fill">
+          <mat-label>Email</mat-label>
+          <input
+            matInput
+            type="email"
+            placeholder="Email"
+            required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
+            [(ngModel)]="email"
+            name="email"
+            #emailInput="ngModel"
+          />
+          <div *ngIf="emailInput.invalid && emailInput.touched">
+            Please enter a valid email.
+          </div>
+        </mat-form-field>
+  
+        <mat-form-field class="form-field" appearance="fill">
+          <mat-label>Password</mat-label>
+          <input
+            matInput
+            type="password"
+            placeholder="Password"
+            required
+            [(ngModel)]="password"
+            name="password"
+            #passwordInput="ngModel"
+          />
+          <div *ngIf="passwordInput.invalid && passwordInput.touched">
+            Password is required.
+          </div>
+        </mat-form-field>
+  
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="loginForm.invalid"
+        >
+          Login
+        </button>
+      </form>
+  
+      
+    </mat-card>
+  </div>
+  

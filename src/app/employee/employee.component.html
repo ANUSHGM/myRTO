@@ -1,0 +1,32 @@
+ <div class="container">
+  <h2>Employee Attendance</h2>
+
+  <div class="info">
+    <p><strong>Employee Name:</strong> {{ employeeName }}</p>
+    <p><strong>Employee Id:</strong> {{ employeeId }}</p>
+    <p><strong>Manager Name:</strong> {{ managerName }}</p>
+    <p><strong>Project Name:</strong> {{ projectName }}</p>
+    <p><strong>Total Days Present:</strong> {{ daysCount }}</p>
+  </div>
+
+  <!--  Remove two-way binding and only use the selectedChange event -->
+  <mat-calendar (selectedChange)="toggleDay($event)"></mat-calendar>
+
+  <button mat-raised-button color="primary" (click)="submitAttendance()">Submit Attendance</button>
+
+   <h3>Selected Days:</h3> 
+   <ul>
+    <li *ngFor="let day of selectedDays">{{ day | date: 'fullDate' }}</li>
+  </ul>
+
+  <div class="notifications">
+    <button mat-raised-button color="accent" (click)="showNotifications()">
+      Notifications ({{ notifications.length }})
+    </button>
+    <div *ngIf="showingNotifications">
+      <ul>
+        <li *ngFor="let notification of notifications">{{ notification }}</li>
+      </ul>
+    </div>
+  </div>
+</div> 
